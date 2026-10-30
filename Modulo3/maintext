@@ -1,0 +1,134 @@
+\documentclass[a4paper,10pt]{article}
+% --- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath}
+% --- Colors ---
+\definecolor{primary}{HTML}{0F172A} % Dark Slate
+\definecolor{secondary}{HTML}{0284C7} % Sky Blue
+\definecolor{accent}{HTML}{E11D48} % Rose Red
+\definecolor{bglight}{HTML}{F8FAFC} % Light Gray/Blue
+% --- Hyperlink Setup ---
+\hypersetup{
+colorlinks=true,
+linkcolor=secondary,
+urlcolor=secondary
+}
+% --- Section Styling ---
+\titleformat{\section}
+{\color{primary}\large\bfseries}
+{\thesection.}{0.5em}{}[\titlerule]
+\titleformat{\subsection}
+{\color{secondary}\bfseries}
+{\thesubsection.}{0.5em}{}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+% --- Custom Box Styling ---
+\tcbset{
+boxrule=0.5pt,
+arc=3pt,
+left=10pt, right=10pt, top=8pt, bottom=8pt
+}
+\newtcolorbox{summarybox}{
+colback=bglight,
+colframe=secondary,
+boxrule=0pt,
+leftrule=4pt,
+arc=0pt
+}
+\newtcolorbox{alertbox}{
+colback=red!5!white,
+colframe=accent,
+boxrule=0pt,
+leftrule=4pt,
+arc=0pt
+}
+\begin{document}
+% --- Header / Masthead ---
+\begin{center}
+{\LARGE \bfseries \color{primary} Geomática y Sistemas de Información Geográfica} \[4pt]
+{\small \bfseries \color{secondary} TÉCNICAS Y HERRAMIENTAS MODERNAS II · INGENIERÍA INDUSTRIAL} \[2pt]
+{\footnotesize \color{gray} Módulo 3: Informe Técnico | Provincia de Mendoza, Argentina | Ciclo Académico 2026}
+\end{center}
+\hrule height 1.5pt
+\vspace{10pt}
+% --- Summary Box ---
+\begin{summarybox}
+\textbf{Resumen Ejecutivo:} El presente informe compila el análisis geoespacial y alfanumérico desarrollado en QGIS para evaluar la inteligencia territorial, la logística agroindustrial y la resiliencia ante riesgos ambientales en la provincia de Mendoza. A través de tres componentes analíticos, se procesaron datos vectoriales de empleo, imágenes satelitales Sentinel-2 y modelos digitales de elevación para fundamentar decisiones estratégicas.
+\end{summarybox}
+\vspace{5pt}
+% --- Section 1 ---
+\section{Estructura del Proyecto y Alcance Territorial}
+El trabajo se articula en tres actividades complementarias que abordan la dinámica productiva, el monitoreo ambiental nival y la exposición infraestructural ante contingencias hídricas en el ámbito provincial:
+\begin{itemize}[leftmargin=*]
+\item \textbf{Actividad 1 (Cadena Agroindustrial):} Análisis de la red de establecimientos agroindustriales, centros logísticos y parques productivos. Estimación del empleo registrado e isocronas de accesibilidad de 2,5 km.
+\item \textbf{Actividad 2 (Monitoreo Nival):} Procesamiento de imágenes Sentinel-2 L2A en la Cuenca Alta del Río Mendoza (Cordón del Plata/Tupungato) para comparar la cobertura de nieve entre septiembre 2024 y 2026.
+\item \textbf{Actividad 3 (Riesgo Aluvional):} Modelación del índice HAND sobre MDE Copernicus (30 m) para proyectar áreas de anegamiento en el Gran Mendoza y medir la vulnerabilidad de parques e infraestructura eléctrica.
+\item \textbf{Integración WebGIS:} Publicación de tableros interactivos para la visualización multicapa de variables alfanuméricas y ráster, orientados a la toma de decisiones territoriales en el sector público y privado.
+\end{itemize}
+\section{Metodología de Integración de Datos}
+Se empleó una arquitectura de procesamiento basada en capas vectoriales de fuentes oficiales (DEIE, INV, IGN) ajustadas topológicamente mediante geoprocesamiento. La información satelital y modelos altimétricos fueron calibrados en la proyección UTM Zona 19S (\texttt{EPSG:32719}) para asegurar mediciones métricas exactas.
+\section{Actividad 1: Mapeo Agroindustrial y Complejos Logísticos}
+Se reestructuró la base de datos espacial incorporando 2.890 establecimientos agroindustriales (bodegas, empacadoras, conserveras) y nodos logísticos. Para corregir sesgos territoriales, se aplicó un factor de ajuste distributivo por distrito:
+[k_d = \frac{E_{\text{oficial}}}{\sum E_{\text{estimado}}}]
+asociando cada unidad productiva a corredores viales mediante buffers de 2,5 km.
+\vspace{5pt}
+\begin{table}[h!]
+\centering
+\small
+\begin{tabular}{l c c c l}
+\toprule
+\textbf{Eje / Corredor Productivo} & \textbf{Establecimientos} & \textbf{Empleo Directo} & \textbf{Participación (%)} & \textbf{Dinámica Interanual (2021-23)} \
+\midrule
+RP 60 - Acceso Sur (Luján / Maipú) & 1.120 & 15.732 & 46,0 % & Crecimiento constante (+3,2 %) \
+Zona Metropolitana (Godoy Cruz / Guaymallén) & 940 & 10.944 & 32,0 % & Consolidado / Saturación alta \
+Valle de Uco (Tupungato / Tunuyán / San Carlos) & 450 & 4.788 & 14,0 % & Expansionista (+12,0 % PyMEs) \
+Eje Este (Ruta 7 - PASIP / San Martín) & 380 & 2.736 & 8,0 % & Suelo industrial disponible \
+\bottomrule
+\end{tabular}
+\caption{Distribución del empleo y unidades productivas por corredor logístico.}
+\end{table}
+\section{Actividad 2: Monitoreo Glacio-Nival en la Cordillera}
+Mediante imágenes Sentinel-2 L2A se comparó el manto nival entre el 11/09/2024 y el 16/09/2026 sobre un área común de 9.850 km² en la cabecera del Río Mendoza. Se implementó el Índice de Diferencia Normalizada de Nieve modificado (￼):
+\begin{summarybox}
+[\text{NDSI}{\text{opt}} = \frac{\text{B03 (Verde)} - \text{B08 (NIR)}}{\text{B03 (Verde)} + \text{B08 (NIR)}} \quad \text{con Criterio de Nieve: } \text{NDSI}{\text{opt}} > -0,08 \quad \text{y} \quad \text{B03} > 0,20]
+\end{summarybox}
+\begin{table}[h!]
+\centering
+\small
+\begin{tabular}{l c c}
+\toprule
+\textbf{Parámetro Evaluado} & \textbf{Septiembre 2024} & \textbf{Septiembre 2026} \
+\midrule
+Superficie Nival & 482.650 ha & 569.140 ha \
+Porcentaje sobre Área Común & 49,0 % & 57,8 % \
+\textbf{Variación Neta} & \multicolumn{2}{c}{\textbf{+86.490 ha (+17,9 % / +8,8 p.p.)}} \
+\bottomrule
+\end{tabular}
+\caption{Comparativa intertemporal de superficie nevada.}
+\end{table}
+La expansión nival se localizó principalmente en las cotas medias (2.500 a 3.800 m s. n. m.) de la ladera oriental del Cordón del Plata.
+\section{Actividad 3: Riesgo Aluvional e Infraestructura Crítica}
+El análisis de susceptibilidad a contingencias hídricas en el Gran Mendoza combinó el modelo de elevación Copernicus GLO-30 con el índice HAND (\textit{Height Above the Nearest Drainage}). Se evaluaron 24 subcuencas del piedemonte y se simularon dos escenarios:
+\begin{itemize}
+\item \textbf{Escenario Normal (￼):} Superficie expuesta de \textbf{215 km²}.
+\item \textbf{Escenario Severo (￼):} Superficie expuesta de \textbf{382 km²} (+77,6 %).
+\end{itemize}
+\section{Conclusiones y Recomendaciones de Ingeniería}
+El análisis hidrometeorológico cruzado con la serie histórica NASA POWER/CHIRPS confirmó que el fenómeno El Niño no correlaciona significativamente con lluvias de verano en el llano (￼), pero incrementa las precipitaciones nivales en alta montaña (￼), trasladando el principal riesgo aluvional a la rápida fusión primaveral e intensidad de tormentas convectivas aisladas.
+\begin{alertbox}
+\textbf{\color{accent} Hallazgos Críticos para la Planificación:}
+\begin{itemize}[leftmargin=*, topsep=2pt, itemsep=2pt]
+\item \textbf{Infraestructura Industrial:} 4 aglomerados industriales clave (Godoy Cruz / Maipú y Las Heras) quedan clasificados en vulnerabilidad media-alta bajo el escenario de evento severo.
+\item \textbf{Red Energética:} Se identificaron 18 km de tendidos eléctricos de Alta Tensión (220 kV y 500 kV) cruzando lechos de escorrentía activos con riesgo potencial de socavación en fundaciones.
+\item \textbf{Recomendación:} Priorizar la construcción de colectores aluvionales secundarios en la franja del piedemonte y adecuar las defensas de infraestructura en cruces de cauces.
+\end{itemize}
+\end{alertbox}
+\end{document}
